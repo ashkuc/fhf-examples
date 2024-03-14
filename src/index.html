@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Wallet</title>
+  <style type="text/css">
+    *, body { 
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    div {
+      margin: 1rem;
+    }
+    select {
+      border: 1px solid #d2d3d6;
+      line-height: 1.5;
+      outline: none;
+      padding: 8px 16px;
+    }
+    textarea, input {
+      display: block;
+      width: 100%;
+      border: 1px solid #d2d3d6;
+      line-height: 1.5;
+      outline: none;
+      padding: 8px 16px;
+      margin-bottom: 16px;
+    }
+    button {
+      background: #009cf0;
+      border-color: #009cf0;
+      color: white;
+      line-height: 24px;
+      padding: 8px 24px;
+      align-items: center;
+      border-radius: 4px;
+      border-style: solid;
+      border-width: 1px;
+      cursor: pointer;
+      display: inline-flex;
+      justify-content: center;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    ul#token-list {
+      margin-left: 16px;
+    }
+    div#token-data img{
+      width: 300px;
+      height: 300px;
+    }
+    div#token-data ul{
+      margin-left: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <button onclick="connectPolkadotWallet('polkadot-js')">Connect Polkadot</button>
+    <button onclick="connectMetamaskWallet()">Connect Metamask</button>
+  </div>
+  <div>
+    <label for="wallets">Account: </label>
+    <select id="wallets">
+    </select>
+  </div>
+  <div>
+    <button onclick="getTokensByAccountViaRest()" >Get tokens</button>
+  </div>
+  <div>
+    <ul id="token-list">
+    </ul>
+  </div>
+  <div>
+    <h3>Get token data</h3>
+    <label for="token-id">Token ID</label>
+    <input id="token-id" type="text" value="1" placeholder="token ID" />
+    <button onclick="getTokenData()" >Get token data</button>
+  </div>
+  <div id="token-data">
+  </div>
+  <div id="transfer">
+    <h3>Drop tokens</h3>
+    <label for="count">Count</label>
+    <input id="count" type="text" value="1" placeholder="Count" />
+    <label for="recipient">Recipient</label>
+    <input id="recipient" type="text" value="" placeholder="recipient address" />
+    <button onclick="dropTickets()" >Drop</button>
+  </div>
+  <div id="set-attribute">
+    <h3>Use ticket</h3>
+    <label for="token-id-to-use">Token ID</label>
+    <input id="token-id-to-use" type="text" value="1" placeholder="token ID" />
+    <button onclick="useTicket()" >Use ticket</button>
+  </div>
+</body>
+</html>
