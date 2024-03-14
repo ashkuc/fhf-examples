@@ -7,9 +7,9 @@ import FHFTickets from './FHFTickets.json';
 
 const DEFAULT_CHAIN = Ethereum.UNIQUE_CHAINS_DATA_FOR_EXTENSIONS.opal; // testnet OPAL
 const OPAL_SDK_REST_URI = 'https://rest.unique.network/opal/v1';
-const COLLECTION_ID = 2482;
+const COLLECTION_ID = 2484;
 const GAS_LIMIT = 200_000;
-const CONTRACT_ADDRESS = '0x2c35B0f84db3Ef2f5De280acD82004a0757d3FFC';
+const CONTRACT_ADDRESS = '0xe2AA00D8E9aC2b206F308B2C567aAa98382e28d0';
 
 const sdk = new Sdk({ baseUrl: OPAL_SDK_REST_URI });
 
@@ -151,7 +151,7 @@ async function getTokenData() {
   $tokenData.innerHTML = '';  
 
   const $image = document.createElement('img');
-  $image.src = data.image.url;
+  $image.src = data.image.fullUrl;
   const $description = document.createElement('div');
   $description.innerHTML = [`Prefix: ${data.collection.tokenPrefix}`,
     `Name: ${data.collection.name}`,
@@ -171,16 +171,16 @@ async function getTokenData() {
   $tokenData.appendChild($attributesList);
 }
 
-async function dropTicketsViaPolkadot(_to, _count, account) {
+async function dropTicketsViaPolkadot(to, _count, account) {
 
   await sdk.evm.send.submitWaitResult({
     abi: FHFTickets.abi,
     address: account.address || '',
     contractAddress: CONTRACT_ADDRESS,
-    funcName: 'dropTickets',
+    funcName: 'dropTicketsBatchCross',
     gasLimit: GAS_LIMIT,
     args: {
-      _to,
+      _to: [Address.extract.ethCrossAccountId(to)],
       _count,
     }
   }, { signer: account.signer });
@@ -189,8 +189,8 @@ async function dropTicketsViaPolkadot(_to, _count, account) {
 async function dropTicketsViaMetamask(to, count) {
   const metamaskProvider = new ethers.providers.Web3Provider(window.ethereum);
   const contract = new ethers.Contract(CONTRACT_ADDRESS, FHFTickets.abi, metamaskProvider.getSigner());
-  const tx = await contract.dropTickets(
-    to, 
+  const tx = await contract.dropTicketsBatchCross(
+    [Address.extract.ethCrossAccountId(to)], 
     count
   );
   await tx.wait();
@@ -222,13 +222,13 @@ async function useTicketViaPolkadot(_tokenId, account) {
 
   await sdk.evm.send.submitWaitResult({
     abi: FHFTickets.abi,
-    address: signer.address || '',
+    address: account.address || '',
     contractAddress: CONTRACT_ADDRESS,
-    funcName: 'useTicketSubstrate',
+    funcName: 'useTicketCross',
     gasLimit: GAS_LIMIT,
     args: {
       _tokenId,
-      substrateAddress: account.address,
+      _owner: Address.extract.ethCrossAccountId(account.address)
     }
   }, { signer: account.signer });
 
@@ -245,7 +245,7 @@ async function useTicket() {
   const $walletsSelect = document.getElementById('wallets');
   const currentAddress = $walletsSelect.value; // get the current address
   const $tokenIdInput = document.getElementById('token-id-to-use');
-  const tokenId = $tokenIdInput.value;
+  const tokenId = Number($tokenIdInput.value);
 
   const account = allAccounts.find(({ address }) => currentAddress === address);
 
