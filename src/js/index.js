@@ -10,6 +10,7 @@ const OPAL_SDK_REST_URI = 'https://rest.unique.network/opal/v1';
 const COLLECTION_ID = 2484;
 const GAS_LIMIT = 200_000;
 const CONTRACT_ADDRESS = '0xe2AA00D8E9aC2b206F308B2C567aAa98382e28d0';
+const NEW_TICKET_IMAGE_URL = 'https://ipfs.unique.network/ipfs/Qme7ntQxiuP6mKx9Y2CsyXkicvqiMN2HUP9UwMt7TeamVB';
 
 const sdk = new Sdk({ baseUrl: OPAL_SDK_REST_URI });
 
@@ -172,18 +173,26 @@ async function getTokenData() {
 }
 
 async function dropTicketsViaPolkadot(to, _count, account) {
+  await sdk.token.createMultiple.submitWaitResult({
+   address: account.address || '',
+   collectionId: COLLECTION_ID,
+   tokens: new Array(_count).fill(null).map(() => ({
+     owner: Address.extract.addressNormalized(to),
+     data: { image: { urlInfix: NEW_TICKET_IMAGE_URL } }
+   }))
+ }, { signer: account.signer });
 
-  await sdk.evm.send.submitWaitResult({
-    abi: FHFTickets.abi,
-    address: account.address || '',
-    contractAddress: CONTRACT_ADDRESS,
-    funcName: 'dropTicketsBatchCross',
-    gasLimit: GAS_LIMIT,
-    args: {
-      _to: [Address.extract.ethCrossAccountId(to)],
-      _count,
-    }
-  }, { signer: account.signer });
+  // await sdk.evm.send.submitWaitResult({
+  //   abi: FHFTickets.abi,
+  //   address: account.address || '',
+  //   contractAddress: CONTRACT_ADDRESS,
+  //   funcName: 'dropTicketsBatchCross',
+  //   gasLimit: GAS_LIMIT,
+  //   args: {
+  //     _to: [Address.extract.ethCrossAccountId(to)],
+  //     _count,
+  //   }
+  // }, { signer: account.signer });
 }
 
 async function dropTicketsViaMetamask(to, count) {
