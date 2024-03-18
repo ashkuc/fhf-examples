@@ -1,0 +1,47 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "eth",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "sub",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct CrossAddress[]",
+          "name": "_to",
+          "type": "tuple[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_count",
+          "type": "uint256"
+        }
+      ],
+      "name": "dropTicketsBatchCross",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "address": "5GVnmTfBf1nA59M4jGXK6Aq9aM2MGFzpp54BwAbx5eETGZNQ",
+  "contractAddress": "0xe2AA00D8E9aC2b206F308B2C567aAa98382e28d0",
+  "funcName": "dropTicketsBatchCross",
+  "gasLimit": 200000,
+  "args": {
+    "_to": [
+      {
+        "eth": "0x319bc8e68987196CD65044DC390D77389F644253",
+        "sub": "0x00"
+      }
+    ],
+    "_count": 1
+  }
+}

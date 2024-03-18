@@ -7,9 +7,9 @@ import FHFTickets from './FHFTickets.json';
 
 const DEFAULT_CHAIN = Ethereum.UNIQUE_CHAINS_DATA_FOR_EXTENSIONS.opal; // testnet OPAL
 const OPAL_SDK_REST_URI = 'https://rest.unique.network/opal/v1';
-const COLLECTION_ID = 2484;
+const COLLECTION_ID = 2486;
 const GAS_LIMIT = 200_000;
-const CONTRACT_ADDRESS = '0xe2AA00D8E9aC2b206F308B2C567aAa98382e28d0';
+const CONTRACT_ADDRESS = '0xcFD8B054AACB162dFaA811cf2766c00979420213';
 const NEW_TICKET_IMAGE_URL = 'https://ipfs.unique.network/ipfs/Qme7ntQxiuP6mKx9Y2CsyXkicvqiMN2HUP9UwMt7TeamVB';
 
 const sdk = new Sdk({ baseUrl: OPAL_SDK_REST_URI });
@@ -228,17 +228,13 @@ async function dropTickets() {
 
 
 async function useTicketViaPolkadot(_tokenId, account) {
-
   await sdk.evm.send.submitWaitResult({
     abi: FHFTickets.abi,
     address: account.address || '',
     contractAddress: CONTRACT_ADDRESS,
-    funcName: 'useTicketCross',
+    funcName: 'useTicket',
     gasLimit: GAS_LIMIT,
-    args: {
-      _tokenId,
-      _owner: Address.extract.ethCrossAccountId(account.address)
-    }
+    args: {_tokenId}
   }, { signer: account.signer });
 
 }
